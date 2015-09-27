@@ -1,0 +1,60 @@
+OpenEmbedded BSP layer for Cavium ThunderX boards 
+
+Supported ThunderX Boards:
+========================
+CN88XX-EVB
+
+set MACHINE to cn88xx-evb or cn88xxbe-evb
+
+This layer depends on:
+
+URI: git://git.openembedded.org/openembedded-core
+layers: meta
+branch: master
+revision: HEAD
+
+
+U-boot commands:
+================
+setenv ipaddr <netmask-value>
+setenv serverip <target-ip-address>
+setenv netmask <server-ip-address>
+setenv gatewayip <gateway-ip-address>
+
+tftpboot 0x500000 {image}; tftpboot 0xf00000 Blackracer.dtb; bootm 0x500000 - 0xf00000
+
+Booting over NFS:`
+setenv bootargs 'console=ttyAMA0,115200n8 maxcpus=48 root=/dev/nfs
+rw nfsroot=<server-ip-address>:<rootfs-mount-directory> rw
+ip=<target-ip-address>:<server-ip-address>:<gateway-ip-
+address>:<netmask-value>::eth0:none'
+
+tftpboot 0x500000 <default-kernel-image-name>
+tftpboot 0xf00000 <device-tree-blob>
+bootm 0x500000 - 0xf00000
+
+Booting ramdisk:
+setenv bootargs 'console=ttyAMA0,115200n8 maxcpus=48 root=/dev/ram rw'
+tftpboot 0x500000 <default-initramfs-kernel-image-name>
+tftpboot 0x10E8480 <device-tree-blob>
+bootm 0x500000 - 0x10E8480
+
+Initramfs
+=========
+
+Add to local.conf:
+
+INITRAMFS_IMAGE_BUNDLE="1"
+INITRAMFS_IMAGE = "core-image-minimal"
+USE_DEVFS = "0"
+
+
+Maintenance
+-----------
+
+Send pull requests, patches, comments or questions to yocto@yoctoproject.org
+
+When sending single patches, please using something like:
+'git send-email -1 -M --to akuster@mvista.com --subject-prefix=meta-thunderX][PATCH'
+
+Layer Maintainer:  Armin Kuster <akuster@mvista.com>

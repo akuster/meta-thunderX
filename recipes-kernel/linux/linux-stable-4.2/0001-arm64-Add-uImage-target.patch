@@ -1,0 +1,66 @@
+From fa9631194af9fd31c45cec98a8ab653738136a35 Mon Sep 17 00:00:00 2001
+From: Corey Minyard <cminyard@mvista.com>
+Date: Wed, 25 Mar 2015 10:58:35 -0500
+Subject: [PATCH] arm64: Add uImage target
+
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Armin Kuster <akuster@mvista.com>
+---
+ arch/arm64/Makefile      |  3 ++-
+ arch/arm64/boot/Makefile | 19 ++++++++++++++++++-
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 8b87159..6d9660e 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -58,7 +58,7 @@ all:	$(KBUILD_IMAGE) $(KBUILD_DTBS)
+ 
+ boot := arch/arm64/boot
+ 
+-Image Image.gz: vmlinux
++Image Image.gz uImage: vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+ 
+ zinstall install: vmlinux
+@@ -77,6 +77,7 @@ archclean:
+ define archhelp
+   echo  '* Image.gz      - Compressed kernel image (arch/$(ARCH)/boot/Image.gz)'
+   echo  '  Image         - Uncompressed kernel image (arch/$(ARCH)/boot/Image)'
++  echo  '  uImage        - Uncompressed u-boot image (arch/$(ARCH)/boot/uImage)'
+   echo  '* dtbs          - Build device tree blobs for enabled boards'
+   echo  '  install       - Install uncompressed kernel'
+   echo  '  zinstall      - Install compressed kernel'
+diff --git a/arch/arm64/boot/Makefile b/arch/arm64/boot/Makefile
+index 5a0e3ab..33ffc61 100644
+--- a/arch/arm64/boot/Makefile
++++ b/arch/arm64/boot/Makefile
+@@ -14,7 +14,24 @@
+ # Based on the ia64 boot/Makefile.
+ #
+ 
+-targets := Image Image.gz
++targets := Image Image.gz uImage
++
++ifneq ($(LOADADDR),)
++  UIMAGE_LOADADDR=$(LOADADDR)
++endif
++
++check_for_multiple_loadaddr = \
++if [ $(words $(UIMAGE_LOADADDR)) -ne 1 ]; then \
++	echo 'multiple (or no) load addresses: $(UIMAGE_LOADADDR)'; \
++	echo 'This is incompatible with uImages'; \
++	echo 'Specify LOADADDR on the commandline to build an uImage'; \
++	false; \
++fi
++
++$(obj)/uImage:  $(obj)/Image FORCE
++	@$(check_for_multiple_loadaddr)
++	$(call if_changed,uimage)
++	@$(kecho) '  Image $@ is ready'
+ 
+ $(obj)/Image: vmlinux FORCE
+ 	$(call if_changed,objcopy)
+-- 
+2.3.5
+

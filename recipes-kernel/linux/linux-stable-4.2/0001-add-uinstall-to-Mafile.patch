@@ -1,0 +1,34 @@
+From dcb9d6e094b399495861e226d8c43162c893f171 Mon Sep 17 00:00:00 2001
+From: Armin Kuster <akuster808@gmail.com>
+Date: Fri, 25 Sep 2015 07:31:34 -0700
+Subject: [PATCH] add uinstall to Mafile
+
+Signed-off-by: Armin Kuster <akuster808@gmail.com>
+---
+ arch/arm64/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 54aa583..afb4a5b 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -61,7 +61,7 @@ boot := arch/arm64/boot
+ Image Image.gz uImage: vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+ 
+-zinstall install: vmlinux
++zinstall install uinstall: vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) $@
+ 
+ %.dtb: scripts
+@@ -92,6 +92,7 @@ define archhelp
+   echo  '  dtbs_install  - Install dtbs to $(INSTALL_DTBS_PATH)'
+   echo  '  install       - Install uncompressed kernel'
+   echo  '  zinstall      - Install compressed kernel'
++  echo  '  uinstall      - Install U-Boot wrapped compressed kernel'
+   echo  '                  Install using (your) ~/bin/installkernel or'
+   echo  '                  (distribution) /sbin/installkernel or'
+   echo  '                  install to $$(INSTALL_PATH) and run lilo'
+-- 
+2.3.5
+
