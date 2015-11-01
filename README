@@ -39,6 +39,11 @@ tftpboot 0x500000 <default-initramfs-kernel-image-name>
 tftpboot 0x10E8480 <device-tree-blob>
 bootm 0x500000 - 0x10E8480
 
+
+EVB-BASE
+bootargs=console=ttyAMA0 earlycon=pl011,0x87e024000000 debug maxcpus=48 rootwait rw root=/dev/sdb1
+bootcmd=usb start; ext2load usb 0 08007ffc0 boot/uImage; ext2load usb 0 0x94C00000 boot/thunder-88xx.dtb; bootm 08007ffc0 - 0x94C00000
+
 Initramfs
 =========
 

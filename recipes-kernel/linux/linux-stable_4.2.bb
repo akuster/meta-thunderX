@@ -13,11 +13,12 @@ S = "${WORKDIR}/git"
 
 KBRANCH_cn88xx-evb ?= "linux-4.2.y"
 KBRANCH_cn88xxbe-evb ?= "linux-4.2.y"
+KERNEL_DEVICETREE ?= "cavium/thunder-88xx.dtb"
 
-SRCREV_machine_cn88xx-evb ?= "f4ca8c1b9c4e24a693794badf09d3a8857c46a80"
-SRCREV_machine_cn88xxbe-evb ?= "f4ca8c1b9c4e24a693794badf09d3a8857c46a80"
+SRCREV_machine_cn88xx-evb ?= "f69d603ce6ec3c6aa9033e1e54102a74e58882bb"
+SRCREV_machine_cn88xxbe-evb ?= "f69d603ce6ec3c6aa9033e1e54102a74e58882bb"
 
-PV = "4.2.1+git${SRCPV}"
+PV = "4.2.5+git${SRCPV}"
 
 SRC_URI = "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;branch=${KBRANCH};name=machine"
 
